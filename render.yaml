@@ -1,0 +1,11 @@
+# render.yaml
+# Deploys this agent as a background worker on Render.com, using the Dockerfile in this repo :contentReference[oaicite:5]{index=5}
+
+services:
+  - type: worker
+    name: coach-agent
+    env: docker
+    plan: free
+    region: oregon
+    dockerfilePath: Dockerfile
+    autoDeploy: true
