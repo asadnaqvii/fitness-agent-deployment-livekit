@@ -11,6 +11,8 @@ deepgram-sdk
 cartesia
 python-dotenv
 livekit-agents[openai,cartesia,deepgram,silero]~=1.0
+livekit.plugins.turn_detector
+livekit.plugins.noise_cancellation
 
 
 
