@@ -18,5 +18,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the codebase
 COPY . .
 
+# Download model files at build time so startup is faster
+RUN python main.py download-files
+
 # By default, run the coach_agent entrypoint (no extra args)
-CMD ["python", "coach_agent.py"]
+CMD ["python", "coach_agent.py dev"]
