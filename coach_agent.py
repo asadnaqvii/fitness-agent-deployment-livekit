@@ -12,6 +12,8 @@ from livekit.agents.cli import run_app
 from livekit.agents.worker import WorkerOptions
 from livekit.agents.job import get_current_job_context
 from livekit.plugins import silero, deepgram, openai, cartesia
+from livekit.plugins.turn_detector.multilingual import MultilingualModel
+from livekit.plugins.noise_cancellation import BVC
 
 load_dotenv()
 
@@ -102,12 +104,20 @@ async def entrypoint(ctx):
 
     coach = CoachAgent(chat_ctx=initial_ctx)
     session = AgentSession(
-        vad=coach._vad,
-        stt=coach._stt,
-        llm=coach._llm,
-        tts=coach._tts,
+        vad=coach._vad,         # Silero VAD for basic endpointing
+        stt=coach._stt,         # Deepgram STT
+        llm=coach._llm,         # OpenAI LLM
+        tts=coach._tts,         # Cartesia TTS
+        turn_detection=MultilingualModel(),  # Transformer-based turn detector
     )
-    await session.start(agent=coach, room=ctx.room)
+
+    await session.start(
+        agent=coach,
+        room=ctx.room,
+        room_input_options=RoomInputOptions(
+            noise_cancellation=BVC(),   # LiveKit Cloud BVC filter
+        ),
+    )
 
 if __name__ == "__main__":
     run_app(WorkerOptions(entrypoint_fnc=entrypoint))
