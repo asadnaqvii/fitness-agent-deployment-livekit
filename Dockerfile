@@ -22,4 +22,4 @@ COPY . .
 RUN python main.py download-files
 
 # By default, run the coach_agent entrypoint (no extra args)
-CMD ["python", "coach_agent.py dev"]
+CMD ["python", "coach_agent.py", "start"]
