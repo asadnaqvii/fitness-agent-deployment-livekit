@@ -7,7 +7,7 @@ import json
 import asyncio
 import aiohttp
 from dotenv import load_dotenv
-from livekit.agents import Agent, AgentSession, ChatContext, AutoSubscribe
+from livekit.agents import Agent, AgentSession, ChatContext, AutoSubscribe, RoomInputOptions
 from livekit.agents.cli import run_app
 from livekit.agents.worker import WorkerOptions
 from livekit.agents.job import get_current_job_context
