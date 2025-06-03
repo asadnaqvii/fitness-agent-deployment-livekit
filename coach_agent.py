@@ -12,8 +12,8 @@ from livekit.agents.cli import run_app
 from livekit.agents.worker import WorkerOptions
 from livekit.agents.job import get_current_job_context
 from livekit.plugins import silero, deepgram, openai, cartesia
-from livekit.plugins.turn_detector.multilingual import MultilingualModel
-from livekit.plugins.noise_cancellation import BVC
+from livekit.plugins.turn_detector.multilingual import MultilingualModel   # turn detector import
+from livekit.plugins.noise_cancellation import BVC                            # noise cancellation import
 
 load_dotenv()
 
@@ -34,10 +34,10 @@ class CoachAgent(Agent):
         super().__init__(
             instructions=BASE_SYSTEM,
             chat_ctx=chat_ctx,
-            vad=silero.VAD.load(),
-            stt=deepgram.STT(),
-            llm=openai.LLM(model="gpt-4o-mini"),
-            tts=cartesia.TTS(model="sonic-english"),
+            vad=silero.VAD.load(),                    # Silero VAD for basic endpointing :contentReference[oaicite:11]{index=11}
+            stt=deepgram.STT(),                       # Deepgram STT
+            llm=openai.LLM(model="gpt-4o-mini"),      # OpenAI LLM
+            tts=cartesia.TTS(model="sonic-english"),   # Cartesia TTS
         )
 
     async def stt_node(self, audio, model_settings):
@@ -104,18 +104,18 @@ async def entrypoint(ctx):
 
     coach = CoachAgent(chat_ctx=initial_ctx)
     session = AgentSession(
-        vad=coach._vad,         # Silero VAD for basic endpointing
-        stt=coach._stt,         # Deepgram STT
-        llm=coach._llm,         # OpenAI LLM
-        tts=coach._tts,         # Cartesia TTS
-        turn_detection=MultilingualModel(),  # Transformer-based turn detector
+        vad=coach._vad,                         # Silero VAD plugin :contentReference[oaicite:12]{index=12}
+        stt=coach._stt,                         # Deepgram STT
+        llm=coach._llm,                         # OpenAI LLM
+        tts=coach._tts,                         # Cartesia TTS
+        turn_detection=MultilingualModel(),      # Enables transformer-based turn detection :contentReference[oaicite:13]{index=13}
     )
 
     await session.start(
         agent=coach,
         room=ctx.room,
         room_input_options=RoomInputOptions(
-            noise_cancellation=BVC(),   # LiveKit Cloud BVC filter
+            noise_cancellation=BVC(),           # Activates AI-powered noise cancellation (BVC) :contentReference[oaicite:14]{index=14}
         ),
     )
 
